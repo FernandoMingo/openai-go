@@ -1,0 +1,25 @@
+mode: set
+openai-go/main.go:23.126,38.16 2 1
+openai-go/main.go:38.16,40.3 1 1
+openai-go/main.go:41.2,41.45 1 0
+openai-go/main.go:44.130,46.2 1 1
+openai-go/main.go:49.40,51.2 1 1
+openai-go/main.go:54.39,55.15 1 1
+openai-go/main.go:55.15,57.3 1 1
+openai-go/main.go:58.2,58.12 1 1
+openai-go/main.go:61.112,69.18 7 1
+openai-go/main.go:69.18,71.41 1 1
+openai-go/main.go:71.41,73.4 1 0
+openai-go/main.go:74.3,74.39 1 1
+openai-go/main.go:76.2,76.18 1 1
+openai-go/main.go:76.18,79.3 2 1
+openai-go/main.go:81.2,82.20 2 1
+openai-go/main.go:82.20,85.3 2 1
+openai-go/main.go:86.2,90.8 5 1
+openai-go/main.go:93.110,95.16 2 1
+openai-go/main.go:95.16,97.3 1 1
+openai-go/main.go:98.2,99.12 2 1
+openai-go/main.go:102.13,104.16 2 0
+openai-go/main.go:104.16,106.3 1 0
+openai-go/main.go:107.2,108.79 2 0
+openai-go/main.go:108.79,110.3 1 0

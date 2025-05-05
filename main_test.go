@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	openai "github.com/sashabaranov/go-openai"
 )
 
 // Test BuildPrompt
@@ -145,5 +147,47 @@ func TestRunChatCompletion_EmptyPrompt(t *testing.T) {
 	}
 	if resp != "No prompt" {
 		t.Errorf("expected 'No prompt', got %q", resp)
+	}
+}
+
+func TestOpenAIClient_CreateChatCompletion(t *testing.T) {
+	// You'd need to mock openai.Client and its CreateChatCompletion method.
+	// This is a bit involved, as openai.Client is a struct, not an interface.
+	// Alternatively, you can test for error handling with an invalid API key.
+	client := &OpenAIClient{client: openai.NewClient("invalid-key")}
+	_, err := client.CreateChatCompletion("gpt-3.5-turbo", 0.5, 10, "test")
+	if err == nil {
+		t.Error("expected error with invalid API key, got nil")
+	}
+}
+
+func TestRunMain_MissingAPIKey(t *testing.T) {
+	// Unset the environment variable
+	os.Unsetenv("OPENAI_API_KEY")
+	// Reset flags
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	// Set os.Args to simulate no api key and a prompt
+	os.Args = []string{"cmd", "Hello"}
+
+	// ParseConfig should return an error about missing API key
+	_, _, _, _, _, err := ParseConfig()
+	if err == nil || err.Error() != "no API key provided. set --api-key or OPENAI_API_KEY in .env or environment" {
+		t.Errorf("expected missing API key error, got %v", err)
+	}
+}
+
+func TestRunMain_Success(t *testing.T) {
+	mock := &MockChatCompleter{Response: "Test response"}
+	err := runMain(mock, "gpt-3.5-turbo", 0.5, 10, "Hello")
+	if err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+}
+
+func TestRunMain_ChatCompletionError(t *testing.T) {
+	mock := &MockChatCompleter{Err: fmt.Errorf("mock error")}
+	err := runMain(mock, "gpt-3.5-turbo", 0.5, 10, "Hello")
+	if err == nil || err.Error() != "ChatCompletion error: mock error" {
+		t.Errorf("expected chat completion error, got %v", err)
 	}
 }

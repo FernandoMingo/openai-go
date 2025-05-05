@@ -45,21 +45,6 @@ func RunChatCompletion(completer ChatCompleter, model string, temperature float6
 	return completer.CreateChatCompletion(model, temperature, maxTokens, prompt)
 }
 
-func main() {
-
-	model, temperature, maxTokens, apiKey, prompt, err := ParseConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	client := &OpenAIClient{client: openai.NewClient(apiKey)}
-	response, err := RunChatCompletion(client, model, temperature, maxTokens, prompt)
-	if err != nil {
-		log.Fatalf("ChatCompletion error: %v", err)
-	}
-	fmt.Println(response)
-}
-
 // BuildPrompt joins CLI args into a single prompt string.
 func BuildPrompt(args []string) string {
 	return strings.Join(args, " ")
@@ -103,4 +88,24 @@ func ParseConfig() (model string, temperature float64, maxTokens int, apiKey str
 	temperature = *temperatureFlag
 	maxTokens = *maxTokensFlag
 	return
+}
+
+func runMain(completer ChatCompleter, model string, temperature float64, maxTokens int, prompt string) error {
+	response, err := RunChatCompletion(completer, model, temperature, maxTokens, prompt)
+	if err != nil {
+		return fmt.Errorf("ChatCompletion error: %v", err)
+	}
+	fmt.Println(response)
+	return nil
+}
+
+func main() {
+	model, temperature, maxTokens, apiKey, prompt, err := ParseConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	client := &OpenAIClient{client: openai.NewClient(apiKey)}
+	if err := runMain(client, model, temperature, maxTokens, prompt); err != nil {
+		log.Fatal(err)
+	}
 }
