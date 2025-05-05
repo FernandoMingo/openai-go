@@ -46,10 +46,6 @@ func RunChatCompletion(completer ChatCompleter, model string, temperature float6
 }
 
 func main() {
-	// Load .env file
-	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: .env file not found or could not be loaded")
-	}
 
 	model, temperature, maxTokens, apiKey, prompt, err := ParseConfig()
 	if err != nil {
@@ -86,6 +82,10 @@ func ParseConfig() (model string, temperature float64, maxTokens int, apiKey str
 
 	apiKey = *apiKeyFlag
 	if apiKey == "" {
+		// Load .env file
+		if err := godotenv.Load(); err != nil {
+			log.Println("Warning: .env file not found or could not be loaded")
+		}
 		apiKey = os.Getenv("OPENAI_API_KEY")
 	}
 	if apiKey == "" {
